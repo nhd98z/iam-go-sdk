@@ -3,13 +3,13 @@ package client
 import (
 	"encoding/json"
 	"fmt"
-	"iam-go-sdk/pkg/oauth/dto"
 	"io"
 	"net/http"
 
-	"iam-go-sdk/pkg/constant"
-	"iam-go-sdk/pkg/oauth/entity"
-	"iam-go-sdk/pkg/util/env"
+	"github.com/anhvietnguyennva/iam-go-sdk/pkg/constant"
+	"github.com/anhvietnguyennva/iam-go-sdk/pkg/oauth/dto"
+	"github.com/anhvietnguyennva/iam-go-sdk/pkg/oauth/entity"
+	"github.com/anhvietnguyennva/iam-go-sdk/pkg/util/env"
 )
 
 func GetJWKs() (map[string]*entity.JWK, error) {

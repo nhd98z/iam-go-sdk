@@ -1,6 +1,6 @@
 package dto
 
-import "iam-go-sdk/pkg/oauth/entity"
+import "github.com/anhvietnguyennva/iam-go-sdk/pkg/oauth/entity"
 
 type GetJWKsKeyData struct {
 	Use string `json:"use"`

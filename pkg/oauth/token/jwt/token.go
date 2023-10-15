@@ -9,9 +9,9 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 
-	"iam-go-sdk/pkg/cache"
-	"iam-go-sdk/pkg/oauth/client"
-	"iam-go-sdk/pkg/oauth/entity"
+	"github.com/anhvietnguyennva/iam-go-sdk/pkg/cache"
+	"github.com/anhvietnguyennva/iam-go-sdk/pkg/oauth/client"
+	"github.com/anhvietnguyennva/iam-go-sdk/pkg/oauth/entity"
 )
 
 func ParseBearer(bearerAuthorization string) (*jwt.Token, error) {
