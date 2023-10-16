@@ -3,6 +3,7 @@ package jwt
 import (
 	"crypto/rsa"
 	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math/big"
@@ -10,11 +11,12 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 
 	"github.com/anhvietnguyennva/iam-go-sdk/pkg/cache"
+	"github.com/anhvietnguyennva/iam-go-sdk/pkg/constant"
 	"github.com/anhvietnguyennva/iam-go-sdk/pkg/oauth/client"
 	"github.com/anhvietnguyennva/iam-go-sdk/pkg/oauth/entity"
 )
 
-func ParseBearer(bearerAuthorization string) (*jwt.Token, error) {
+func ParseBearer(bearerAuthorization string) (*entity.AccessToken, error) {
 	var bearerSchema = "Bearer "
 	if len(bearerAuthorization) <= len(bearerSchema) {
 		return nil, fmt.Errorf("encountered error when parsing bearer jwt: invalid bearer authorization")
@@ -22,8 +24,8 @@ func ParseBearer(bearerAuthorization string) (*jwt.Token, error) {
 	return ParseBearer(bearerAuthorization[len(bearerSchema):])
 }
 
-func Parse(tokenJwt string) (*jwt.Token, error) {
-	token, err := jwt.Parse(tokenJwt,
+func Parse(tokenJWTString string) (*entity.AccessToken, error) {
+	tokenJWT, err := jwt.Parse(tokenJWTString,
 		func(token *jwt.Token) (interface{}, error) {
 			if _, isValid := token.Method.(*jwt.SigningMethodRSA); !isValid {
 				return nil, fmt.Errorf("encountered error when parsing jwt: invalid signing method: %s", token.Header["alg"])
@@ -61,11 +63,51 @@ func Parse(tokenJwt string) (*jwt.Token, error) {
 		return nil, err
 	}
 
-	if !token.Valid {
+	if !tokenJWT.Valid {
 		return nil, errors.New("encountered error when parsing jwt: token is invalid")
 	}
 
-	return token, nil
+	claims, ok := tokenJWT.Claims.(jwt.MapClaims)
+	if !ok {
+		return nil, errors.New("encountered error when parsing jwt: can not convert tokenJWT.Claims to map[string]any")
+	}
+
+	clientID, ok := claims[constant.JWTClaimKeyClientID].(string)
+	if !ok || clientID == "" {
+		return nil, fmt.Errorf("encountered error when parsing jwt: clientID is empty or invalid format: %v", claims[constant.JWTClaimKeyClientID])
+	}
+
+	scopesJson, err := json.Marshal(claims[constant.JWTClaimKeyScopes])
+	if err != nil {
+		return nil, fmt.Errorf("encountered error when parsing jwt: scopes is invalid format: %v", claims[constant.JWTClaimKeyScopes])
+	}
+	var scopes []string
+	err = json.Unmarshal(scopesJson, &scopes)
+	if err != nil {
+		return nil, fmt.Errorf("encountered error when parsing jwt: scopes is invalid format: %v", claims[constant.JWTClaimKeyScopes])
+	}
+
+	subject, err := tokenJWT.Claims.GetSubject()
+	if err != nil {
+		return nil, fmt.Errorf("encountered error when parsing jwt: subject is invalid, %s", err)
+	}
+	expirationTime, err := tokenJWT.Claims.GetExpirationTime()
+	if err != nil {
+		return nil, fmt.Errorf("encountered error when parsing jwt: expirationTime is invalid, %s", err)
+	}
+	issueAt, err := tokenJWT.Claims.GetIssuedAt()
+	if err != nil {
+		return nil, fmt.Errorf("encountered error when parsing jwt: issueAt is invalid, %s", err)
+	}
+
+	return &entity.AccessToken{
+		Token:          *tokenJWT,
+		ClientID:       clientID,
+		Subject:        subject,
+		ExpirationTime: expirationTime.UnixMilli(),
+		IssueAt:        issueAt.UnixMilli(),
+		Scopes:         scopes,
+	}, nil
 }
 
 func getJWKByKid(kid string) (*entity.JWK, error) {
