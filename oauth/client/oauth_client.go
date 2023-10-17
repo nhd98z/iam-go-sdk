@@ -3,17 +3,16 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+	constant2 "github.com/anhvietnguyennva/iam-go-sdk/constant"
+	"github.com/anhvietnguyennva/iam-go-sdk/oauth/dto"
+	"github.com/anhvietnguyennva/iam-go-sdk/oauth/entity"
+	"github.com/anhvietnguyennva/iam-go-sdk/util/env"
 	"io"
 	"net/http"
-
-	"github.com/anhvietnguyennva/iam-go-sdk/pkg/constant"
-	"github.com/anhvietnguyennva/iam-go-sdk/pkg/oauth/dto"
-	"github.com/anhvietnguyennva/iam-go-sdk/pkg/oauth/entity"
-	"github.com/anhvietnguyennva/iam-go-sdk/pkg/util/env"
 )
 
 func GetJWKs() (map[string]*entity.JWK, error) {
-	url := env.StringFromEnv(constant.EnvKeyOAuthGetJWKsURL, constant.OAuthGetJWKsDefaultURL)
+	url := env.StringFromEnv(constant2.EnvKeyOAuthGetJWKsURL, constant2.OAuthGetJWKsDefaultURL)
 	res, err := http.Get(url)
 	if err != nil {
 		return nil, err
