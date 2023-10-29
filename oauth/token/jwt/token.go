@@ -20,7 +20,7 @@ func ParseBearer(bearerAuthorization string) (*entity2.AccessToken, error) {
 	if len(bearerAuthorization) <= len(bearerSchema) {
 		return nil, fmt.Errorf("encountered error when parsing bearer jwt: invalid bearer authorization")
 	}
-	return ParseBearer(bearerAuthorization[len(bearerSchema):])
+	return Parse(bearerAuthorization[len(bearerSchema):])
 }
 
 func Parse(tokenJWTString string) (*entity2.AccessToken, error) {
