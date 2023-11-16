@@ -6,13 +6,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math/big"
+
+	"github.com/golang-jwt/jwt/v5"
+
 	cache2 "github.com/anhvietnguyennva/iam-go-sdk/cache"
 	"github.com/anhvietnguyennva/iam-go-sdk/constant"
 	"github.com/anhvietnguyennva/iam-go-sdk/oauth/client"
 	entity2 "github.com/anhvietnguyennva/iam-go-sdk/oauth/entity"
-	"math/big"
-
-	"github.com/golang-jwt/jwt/v5"
 )
 
 func ParseBearer(bearerAuthorization string) (*entity2.AccessToken, error) {
