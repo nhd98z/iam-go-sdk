@@ -3,7 +3,8 @@ package cache
 import "strings"
 
 const (
-	KeyJWKPrefix = "jwk"
+	KeyJWKPrefix         = "jwk"
+	KeyAccessTokenPrefix = "access_token"
 
 	KeyDelimiter = ":"
 )

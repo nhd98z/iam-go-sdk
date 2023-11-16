@@ -10,13 +10,13 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 
-	cache2 "github.com/anhvietnguyennva/iam-go-sdk/cache"
+	"github.com/anhvietnguyennva/iam-go-sdk/cache"
 	"github.com/anhvietnguyennva/iam-go-sdk/constant"
 	"github.com/anhvietnguyennva/iam-go-sdk/oauth/client"
-	entity2 "github.com/anhvietnguyennva/iam-go-sdk/oauth/entity"
+	"github.com/anhvietnguyennva/iam-go-sdk/oauth/entity"
 )
 
-func ParseBearer(bearerAuthorization string) (*entity2.AccessToken, error) {
+func ParseBearer(bearerAuthorization string) (*entity.AccessToken, error) {
 	var bearerSchema = "Bearer "
 	if len(bearerAuthorization) <= len(bearerSchema) {
 		return nil, fmt.Errorf("encountered error when parsing bearer jwt: invalid bearer authorization")
@@ -24,7 +24,7 @@ func ParseBearer(bearerAuthorization string) (*entity2.AccessToken, error) {
 	return Parse(bearerAuthorization[len(bearerSchema):])
 }
 
-func Parse(tokenJWTString string) (*entity2.AccessToken, error) {
+func Parse(tokenJWTString string) (*entity.AccessToken, error) {
 	tokenJWT, err := jwt.Parse(tokenJWTString,
 		func(token *jwt.Token) (interface{}, error) {
 			if _, isValid := token.Method.(*jwt.SigningMethodRSA); !isValid {
@@ -100,7 +100,7 @@ func Parse(tokenJWTString string) (*entity2.AccessToken, error) {
 		return nil, fmt.Errorf("encountered error when parsing jwt: issueAt is invalid, %s", err)
 	}
 
-	return &entity2.AccessToken{
+	return &entity.AccessToken{
 		Token:          *tokenJWT,
 		ClientID:       clientID,
 		Subject:        subject,
@@ -110,10 +110,10 @@ func Parse(tokenJWTString string) (*entity2.AccessToken, error) {
 	}, nil
 }
 
-func getJWKByKid(kid string) (*entity2.JWK, error) {
+func getJWKByKid(kid string) (*entity.JWK, error) {
 	// check cache
-	cacheKey := cache2.Key(cache2.KeyJWKPrefix, kid)
-	cached, err := cache2.Get[*entity2.JWK](cacheKey)
+	cacheKey := cache.Key(cache.KeyJWKPrefix, kid)
+	cached, err := cache.Get[*entity.JWK](cacheKey)
 	if err == nil && cached != nil {
 		return cached, nil
 	}
@@ -129,7 +129,7 @@ func getJWKByKid(kid string) (*entity2.JWK, error) {
 	}
 
 	// set cache
-	cache2.Set(cacheKey, jwk)
+	cache.Set(cacheKey, jwk)
 
 	return jwk, nil
 }

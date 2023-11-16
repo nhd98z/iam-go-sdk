@@ -9,13 +9,13 @@ import (
 	"net/url"
 	"strconv"
 
-	constant2 "github.com/anhvietnguyennva/iam-go-sdk/constant"
+	"github.com/anhvietnguyennva/iam-go-sdk/constant"
 	"github.com/anhvietnguyennva/iam-go-sdk/permission/dto"
 	"github.com/anhvietnguyennva/iam-go-sdk/util/env"
 )
 
 func CheckPermission(namespace string, object string, relation string, subjectID string, maxDepth uint8) (bool, error) {
-	endpoint, err := url.Parse(env.StringFromEnv(constant2.EnvKeyPermissionCheckPermissionsURL, constant2.IAMPermissionCheckPermissionsDefaultURL))
+	endpoint, err := url.Parse(env.StringFromEnv(constant.EnvKeyPermissionCheckPermissionsURL, constant.IAMPermissionCheckPermissionsDefaultURL))
 	if err != nil {
 		return false, err
 	}
@@ -48,7 +48,7 @@ func CheckPermission(namespace string, object string, relation string, subjectID
 }
 
 func CreatePermission(request *dto.CreatePermissionRequest, bearerAccessToken string) (string, error) {
-	endpoint := env.StringFromEnv(constant2.EnvKeyPermissionCreateSubjectRelationTupleURL, constant2.IAMPermissionCreateSubjectRelationTupleDefaultURL)
+	endpoint := env.StringFromEnv(constant.EnvKeyPermissionCreateSubjectRelationTupleURL, constant.IAMPermissionCreateSubjectRelationTupleDefaultURL)
 	marshalledReq, err := json.Marshal(request)
 	if err != nil {
 		return "", err
@@ -79,4 +79,44 @@ func CreatePermission(request *dto.CreatePermissionRequest, bearerAccessToken st
 	}
 
 	return responseBody.Data.ID, nil
+}
+
+func CreateViewerPermission(namespace string, object string, subjectID string, bearerAccessToken string) (string, error) {
+	request := dto.CreatePermissionRequest{
+		Namespace: namespace,
+		Object:    object,
+		Relation:  constant.IAMPermissionRelationViewer,
+		SubjectID: subjectID,
+	}
+	return CreatePermission(&request, bearerAccessToken)
+}
+
+func CreateEditorPermission(namespace string, object string, subjectID string, bearerAccessToken string) (string, error) {
+	request := dto.CreatePermissionRequest{
+		Namespace: namespace,
+		Object:    object,
+		Relation:  constant.IAMPermissionRelationEditor,
+		SubjectID: subjectID,
+	}
+	return CreatePermission(&request, bearerAccessToken)
+}
+
+func CreateOwnerPermission(namespace string, object string, subjectID string, bearerAccessToken string) (string, error) {
+	request := dto.CreatePermissionRequest{
+		Namespace: namespace,
+		Object:    object,
+		Relation:  constant.IAMPermissionRelationOwner,
+		SubjectID: subjectID,
+	}
+	return CreatePermission(&request, bearerAccessToken)
+}
+
+func CreateConsumerPermission(namespace string, object string, subjectID string, bearerAccessToken string) (string, error) {
+	request := dto.CreatePermissionRequest{
+		Namespace: namespace,
+		Object:    object,
+		Relation:  constant.IAMPermissionRelationConsumer,
+		SubjectID: subjectID,
+	}
+	return CreatePermission(&request, bearerAccessToken)
 }
