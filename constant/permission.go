@@ -8,4 +8,6 @@ const (
 	IAMPermissionRelationEditor   = "editor"
 	IAMPermissionRelationOwner    = "owner"
 	IAMPermissionRelationConsumer = "consumer"
+
+	IAMPermissionCheckPermissionMaxDepthDefault = 3
 )

@@ -37,22 +37,22 @@ func (s *SDK) GetBearerAccessToken(clientID string, clientSecret string) (string
 }
 
 func (s *SDK) CheckPermission(namespace string, object string, relation string, subjectID string) (bool, error) {
-	return permissionclient.CheckPermission(namespace, object, relation, subjectID, 0)
+	return permissionclient.CheckPermission(namespace, object, relation, subjectID, constant.IAMPermissionCheckPermissionMaxDepthDefault)
 }
 
 func (s *SDK) CheckViewerPermission(namespace string, object string, subjectID string) (bool, error) {
-	return permissionclient.CheckPermission(namespace, object, constant.IAMPermissionRelationViewer, subjectID, 0)
+	return permissionclient.CheckPermission(namespace, object, constant.IAMPermissionRelationViewer, subjectID, constant.IAMPermissionCheckPermissionMaxDepthDefault)
 }
 
 func (s *SDK) CheckEditorPermission(namespace string, object string, subjectID string) (bool, error) {
-	return permissionclient.CheckPermission(namespace, object, constant.IAMPermissionRelationEditor, subjectID, 0)
+	return permissionclient.CheckPermission(namespace, object, constant.IAMPermissionRelationEditor, subjectID, constant.IAMPermissionCheckPermissionMaxDepthDefault)
 }
 
 func (s *SDK) CheckOwnerPermission(namespace string, object string, subjectID string) (bool, error) {
-	return permissionclient.CheckPermission(namespace, object, constant.IAMPermissionRelationOwner, subjectID, 0)
+	return permissionclient.CheckPermission(namespace, object, constant.IAMPermissionRelationOwner, subjectID, constant.IAMPermissionCheckPermissionMaxDepthDefault)
 }
 func (s *SDK) CheckConsumerPermission(namespace string, object string, subjectID string) (bool, error) {
-	return permissionclient.CheckPermission(namespace, object, constant.IAMPermissionRelationConsumer, subjectID, 0)
+	return permissionclient.CheckPermission(namespace, object, constant.IAMPermissionRelationConsumer, subjectID, constant.IAMPermissionCheckPermissionMaxDepthDefault)
 }
 
 func (s *SDK) CreatePermission(request *dto.CreatePermissionRequest, bearerAccessToken string) (string, error) {
