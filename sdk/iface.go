@@ -12,7 +12,11 @@ type ISDK interface {
 	GetAccessToken(clientID string, clientSecret string) (string, error)
 	GetBearerAccessToken(clientID string, clientSecret string) (string, error)
 
-	CheckPermission(namespace string, object string, relation string, subjectID string, maxDepth uint8) (bool, error)
+	CheckPermission(namespace string, object string, relation string, subjectID string) (bool, error)
+	CheckViewerPermission(namespace string, object string, subjectID string) (bool, error)
+	CheckEditorPermission(namespace string, object string, subjectID string) (bool, error)
+	CheckOwnerPermission(namespace string, object string, subjectID string) (bool, error)
+	CheckConsumerPermission(namespace string, object string, subjectID string) (bool, error)
 	CreatePermission(request *dto.CreatePermissionRequest, bearerAccessToken string) (string, error)
 	CreateViewerPermission(namespace string, object string, subjectID string, bearerAccessToken string) (string, error)
 	CreateEditorPermission(namespace string, object string, subjectID string, bearerAccessToken string) (string, error)

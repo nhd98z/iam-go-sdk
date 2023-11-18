@@ -3,6 +3,7 @@ package sdk
 import (
 	"fmt"
 
+	"github.com/anhvietnguyennva/iam-go-sdk/constant"
 	"github.com/anhvietnguyennva/iam-go-sdk/oauth/entity"
 	"github.com/anhvietnguyennva/iam-go-sdk/oauth/token"
 	"github.com/anhvietnguyennva/iam-go-sdk/oauth/token/jwt"
@@ -35,8 +36,23 @@ func (s *SDK) GetBearerAccessToken(clientID string, clientSecret string) (string
 	return fmt.Sprintf("Bearer %s", accessToken), nil
 }
 
-func (s *SDK) CheckPermission(namespace string, object string, relation string, subjectID string, maxDepth uint8) (bool, error) {
-	return permissionclient.CheckPermission(namespace, object, relation, subjectID, maxDepth)
+func (s *SDK) CheckPermission(namespace string, object string, relation string, subjectID string) (bool, error) {
+	return permissionclient.CheckPermission(namespace, object, relation, subjectID, 0)
+}
+
+func (s *SDK) CheckViewerPermission(namespace string, object string, subjectID string) (bool, error) {
+	return permissionclient.CheckPermission(namespace, object, constant.IAMPermissionRelationViewer, subjectID, 0)
+}
+
+func (s *SDK) CheckEditorPermission(namespace string, object string, subjectID string) (bool, error) {
+	return permissionclient.CheckPermission(namespace, object, constant.IAMPermissionRelationEditor, subjectID, 0)
+}
+
+func (s *SDK) CheckOwnerPermission(namespace string, object string, subjectID string) (bool, error) {
+	return permissionclient.CheckPermission(namespace, object, constant.IAMPermissionRelationOwner, subjectID, 0)
+}
+func (s *SDK) CheckConsumerPermission(namespace string, object string, subjectID string) (bool, error) {
+	return permissionclient.CheckPermission(namespace, object, constant.IAMPermissionRelationConsumer, subjectID, 0)
 }
 
 func (s *SDK) CreatePermission(request *dto.CreatePermissionRequest, bearerAccessToken string) (string, error) {
@@ -44,17 +60,41 @@ func (s *SDK) CreatePermission(request *dto.CreatePermissionRequest, bearerAcces
 }
 
 func (s *SDK) CreateViewerPermission(namespace string, object string, subjectID string, bearerAccessToken string) (string, error) {
-	return permissionclient.CreateViewerPermission(namespace, object, subjectID, bearerAccessToken)
+	request := dto.CreatePermissionRequest{
+		Namespace: namespace,
+		Object:    object,
+		Relation:  constant.IAMPermissionRelationViewer,
+		SubjectID: subjectID,
+	}
+	return permissionclient.CreatePermission(&request, bearerAccessToken)
 }
 
 func (s *SDK) CreateEditorPermission(namespace string, object string, subjectID string, bearerAccessToken string) (string, error) {
-	return permissionclient.CreateEditorPermission(namespace, object, subjectID, bearerAccessToken)
+	request := dto.CreatePermissionRequest{
+		Namespace: namespace,
+		Object:    object,
+		Relation:  constant.IAMPermissionRelationEditor,
+		SubjectID: subjectID,
+	}
+	return permissionclient.CreatePermission(&request, bearerAccessToken)
 }
 
 func (s *SDK) CreateOwnerPermission(namespace string, object string, subjectID string, bearerAccessToken string) (string, error) {
-	return permissionclient.CreateOwnerPermission(namespace, object, subjectID, bearerAccessToken)
+	request := dto.CreatePermissionRequest{
+		Namespace: namespace,
+		Object:    object,
+		Relation:  constant.IAMPermissionRelationOwner,
+		SubjectID: subjectID,
+	}
+	return permissionclient.CreatePermission(&request, bearerAccessToken)
 }
 
 func (s *SDK) CreateConsumerPermission(namespace string, object string, subjectID string, bearerAccessToken string) (string, error) {
-	return permissionclient.CreateConsumerPermission(namespace, object, subjectID, bearerAccessToken)
+	request := dto.CreatePermissionRequest{
+		Namespace: namespace,
+		Object:    object,
+		Relation:  constant.IAMPermissionRelationConsumer,
+		SubjectID: subjectID,
+	}
+	return permissionclient.CreatePermission(&request, bearerAccessToken)
 }
