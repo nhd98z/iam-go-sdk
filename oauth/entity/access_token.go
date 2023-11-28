@@ -22,5 +22,5 @@ type AccessTokenString struct {
 }
 
 func (t *AccessTokenString) IsExpired() bool {
-	return time.Now().Unix() < t.ExpirationTime
+	return time.Now().Unix() > t.ExpirationTime
 }
