@@ -69,6 +69,11 @@ func CreatePermission(request *dto.CreatePermissionRequest, bearerAccessToken st
 	if err != nil {
 		return "", fmt.Errorf("encountered error when calling %s: %v", endpoint, err)
 	}
+
+	if res.StatusCode == http.StatusConflict {
+		return "", nil
+	}
+
 	if res.StatusCode != http.StatusOK {
 		return "", fmt.Errorf("encountered error when calling %s, status code: %d, response: %s", endpoint, res.StatusCode, bodyJson)
 	}
