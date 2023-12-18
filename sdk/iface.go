@@ -25,4 +25,10 @@ type ISDK interface {
 	CreateEditorPermission(namespace string, object string, subjectID string, bearerAccessToken string) (string, error)
 	CreateOwnerPermission(namespace string, object string, subjectID string, bearerAccessToken string) (string, error)
 	CreateConsumerPermission(namespace string, object string, subjectID string, bearerAccessToken string) (string, error)
+
+	CreatePermissionMultipleObjects(request *dto.CreatePermissionMultipleObjectsRequest, bearerAccessToken string) ([]string, error)
+	CreateViewerPermissionMultipleObjects(namespace string, objects []string, subjectID string, bearerAccessToken string) ([]string, error)
+	CreateEditorPermissionMultipleObjects(namespace string, objects []string, subjectID string, bearerAccessToken string) ([]string, error)
+	CreateOwnerPermissionMultipleObjects(namespace string, objects []string, subjectID string, bearerAccessToken string) ([]string, error)
+	CreateConsumerPermissionMultipleObjects(namespace string, objects []string, subjectID string, bearerAccessToken string) ([]string, error)
 }
