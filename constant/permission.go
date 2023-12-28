@@ -1,9 +1,9 @@
 package constant
 
 const (
-	IAMPermissionCreateSubjectRelationTupleDefaultURL                = "http://iam-permission-admin-api.iam.svc:8080/admin/api/v1/subject-relation-tuples"
-	IAMPermissionCreateSubjectRelationTupleMultipleObjectsDefaultURL = "http://iam-permission-admin-api.iam.svc:8080/admin/api/v1/subject-relation-tuples/multiple-objects"
-	IAMPermissionCheckPermissionsDefaultURL                          = "http://iam-permission-public-api.iam.svc:8080/api/v1/permissions/check"
+	IAMPermissionCreateSubjectRelationTupleDefaultURL                = "https://permission-admin-api.equitize.dev/admin/api/v1/subject-relation-tuples"
+	IAMPermissionCreateSubjectRelationTupleMultipleObjectsDefaultURL = "https://permission-admin-api.equitize.dev/admin/api/v1/subject-relation-tuples/multiple-objects"
+	IAMPermissionCheckPermissionsDefaultURL                          = "https://permission-public-api.equitize.dev/api/v1/permissions/check"
 
 	IAMPermissionRelationViewer   = "viewer"
 	IAMPermissionRelationEditor   = "editor"

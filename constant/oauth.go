@@ -1,8 +1,8 @@
 package constant
 
 const (
-	OAuthGetJWKsDefaultURL       = "http://iam-oauth-public-api.iam.svc:8080/.well-known/jwks.json"
-	OAuthExchangeTokenDefaultURL = "http://iam-oauth-public-api.iam.svc:8080/oauth2/token"
+	OAuthGetJWKsDefaultURL       = "https://oauth-api.equitize.dev/.well-known/jwks.json"
+	OAuthExchangeTokenDefaultURL = "https://oauth-api.equitize.dev/oauth2/token"
 
 	OAuthGrantTypeClientCredentials = "client_credentials"
 )
